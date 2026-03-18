@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Shop Safety — Script & Storyboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root {
+    --black: #0f0f0f;
+    --steel: #1c2333;
+    --yellow: #f5c518;
+    --orange: #e85d04;
+    --white: #f8f6f0;
+    --mid: #8a8f9e;
+    --card: #1a2030;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  header {
+    background: var(--steel);
+    border-bottom: 4px solid var(--yellow);
+    padding: 2.5rem 4rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .header-icon {
+    width: 64px; height: 64px;
+    background: var(--yellow);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  header h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1;
+  }
+
+  header p {
+    color: var(--mid);
+    margin-top: 0.4rem;
+    font-size: 0.95rem;
+  }
+
+  .meta-bar {
+    background: var(--yellow);
+    color: var(--black);
+    padding: 0.6rem 4rem;
+    display: flex;
+    gap: 3rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .toc {
+    background: var(--card);
+    border-left: 4px solid var(--orange);
+    margin: 2.5rem 4rem;
+    padding: 1.5rem 2rem;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .toc h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--orange);
+    margin-bottom: 0.8rem;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.4rem;
+  }
+
+  .toc a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.15s;
+  }
+  .toc a:hover { color: var(--yellow); }
+  .toc a span.num {
+    background: var(--steel);
+    color: var(--yellow);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  .scene {
+    margin: 0 4rem 3rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #2a3042;
+  }
+
+  .scene-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1rem 1.5rem;
+    background: var(--steel);
+    border-bottom: 2px solid var(--yellow);
+  }
+
+  .scene-num {
+    background: var(--yellow);
+    color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    width: 2.5rem; height: 2.5rem;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .scene-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .scene-meta {
+    margin-left: auto;
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: var(--mid);
+  }
+
+  .scene-meta span {
+    background: #12161f;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .scene-body {
+    background: var(--card);
+    display: grid;
+    grid-template-columns: 320px 1fr;
+  }
+
+  .storyboard {
+    background: #12161f;
+    padding: 1.5rem;
+    border-right: 1px solid #2a3042;
+  }
+
+  .storyboard h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--orange);
+    margin-bottom: 0.8rem;
+  }
+
+  .frame {
+    background: var(--steel);
+    border-radius: 6px;
+    aspect-ratio: 16/9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background: repeating-linear-gradient(
+      45deg, white 0, white 1px, transparent 1px, transparent 8px
+    );
+  }
+
+  .frame-emoji { font-size: 2rem; }
+  .frame-label {
+    font-size: 0.8rem;
+    color: var(--mid);
+    font-style: italic;
+  }
+  .frame-visual {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--yellow);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .visual-notes {
+    font-size: 0.82rem;
+    color: var(--mid);
+    line-height: 1.5;
+  }
+
+  .visual-notes strong { color: var(--white); }
+
+  .script-col {
+    padding: 1.5rem 2rem;
+  }
+
+  .script-col h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--orange);
+    margin-bottom: 0.8rem;
+  }
+
+  .text-block {
+    background: #12161f;
+    border-radius: 6px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 3px solid transparent;
+  }
+
+  .text-block.on-screen {
+    border-left-color: var(--yellow);
+  }
+  .text-block.narration {
+    border-left-color: var(--orange);
+  }
+
+  .block-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+  }
+
+  .text-block.on-screen .block-label { color: var(--yellow); }
+  .text-block.narration .block-label { color: var(--orange); }
+
+  .text-block p {
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  .text-block .headline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--yellow);
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  .bullets {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5rem;
+  }
+  .bullets li {
+    padding: 0.3rem 0 0.3rem 1.4rem;
+    position: relative;
+    font-size: 0.9rem;
+  }
+  .bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--yellow);
+  }
+
+  .warning-tag {
+    display: inline-block;
+    background: var(--orange);
+    color: white;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-bottom: 0.5rem;
+  }
+
+  footer {
+    background: var(--steel);
+    border-top: 2px solid #2a3042;
+    padding: 1.5rem 4rem;
+    color: var(--mid);
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 900px) {
+    header, .meta-bar, .toc, .scene { margin-left: 1rem; margin-right: 1rem; padding-left: 1rem; padding-right: 1rem; }
+    .scene-body { grid-template-columns: 1fr; }
+    .storyboard { border-right: none; border-bottom: 1px solid #2a3042; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-icon">⚙️</div>
+  <div>
+    <h1>Machine Shop Safety</h1>
+    <p>Training Video — Script &amp; Storyboard | New Employees &amp; Beginners</p>
+  </div>
+</header>
+
+<div class="meta-bar">
+  <span>📽 Format: Text-on-Screen + Visuals</span>
+  <span>⏱ Runtime: 15–18 Minutes</span>
+  <span>🎯 Audience: New Employees</span>
+  <span>📑 7 Scenes</span>
+</div>
+
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <div class="toc-grid">
+    <a href="#s1"><span class="num">01</span> Introduction</a>
+    <a href="#s2"><span class="num">02</span> General Shop Rules</a>
+    <a href="#s3"><span class="num">03</span> PPE Overview</a>
+    <a href="#s4"><span class="num">04</span> Eye &amp; Face Protection</a>
+    <a href="#s5"><span class="num">05</span> Hazard Awareness</a>
+    <a href="#s6"><span class="num">06</span> Emergency Procedures</a>
+    <a href="#s7"><span class="num">07</span> Recap &amp; Sign-Off</a>
+  </div>
+</div>
+
+<!-- SCENE 1 -->
+<div class="scene" id="s1">
+  <div class="scene-header">
+    <div class="scene-num">01</div>
+    <div class="scene-title">Introduction — Why Safety Matters</div>
+    <div class="scene-meta">
+      <span>⏱ ~2 min</span>
+      <span>🎬 Opening</span>
+    </div>
+  </div>
+  <div class="scene-body">
+    <div class="storyboard">
+      <h3>Storyboard</h3>
+      <div class="frame">
+        <div class="frame-emoji">⚙️</div>
+        <div class="frame-visual">Title Card</div>
+        <div class="frame-label">Dark background, large yellow title text, animated gear icon</div>
+      </div>
+      <div class="frame">
+        <div class="frame-emoji">🏭</div>
+        <div class="frame-visual">Shop Walkthrough</div>
+        <div class="frame-label">Wide shot of shop floor — machines idle, labels visible</div>
+      </div>
+      <p class="visual-notes"><strong>Transitions:</strong> Hard cuts. Bold text appears with fast slide-in. Yellow on black for maximum contrast. Use a countdown-style timer graphic to open.</p>
+    </div>
+    <div class="script-col">
+      <h3>Script</h3>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 On-Screen Text</div>
+        <div class="headline">MACHINE SHOP SAFETY</div>
+        <div class="headline" style="color:var(--orange); font-size:1rem">Essential Training for New Employees</div>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration / Caption</div>
+        <p>Welcome to the Machine Shop Safety Training. This video covers everything you need to know before you set foot on the shop floor — from basic shop rules, to personal protective equipment, to what to do in an emergency.</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 On-Screen Text</div>
+        <div class="headline">EVERY YEAR:</div>
+        <ul class="bullets">
+          <li>400,000+ machine shop injuries reported in North America</li>
+          <li>Most are <strong>preventable</strong> with proper training</li>
+          <li>Knowledge protects <strong>you</strong> and everyone around you</li>
+        </ul>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration / Caption</div>
+        <p>Machine shops are exciting, productive environments — but they demand respect. The equipment here is powerful, the materials are heavy, and the hazards are real. The good news? With the right habits, this is also one of the safest places you'll ever work.</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 On-Screen Text</div>
+        <div class="headline">THIS VIDEO COVERS:</div>
+        <ul class="bullets">
+          <li>General Shop Rules</li>
+          <li>Personal Protective Equipment (PPE)</li>
+          <li>Hazard Identification &amp; Awareness</li>
+          <li>Emergency Procedures</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE 2 -->
+<div class="scene" id="s2">
+  <div class="scene-header">
+    <div class="scene-num">02</div>
+    <div class="scene-title">General Shop Rules</div>
+    <div class="scene-meta">
+      <span>⏱ ~3 min</span>
+      <span>🎬 Core Rules</span>
+    </div>
+  </div>
+  <div class="scene-body">
+    <div class="storyboard">
+      <h3>Storyboard</h3>
+      <div class="frame">
+        <div class="frame-emoji">📋</div>
+        <div class="frame-visual">Rule Cards</div>
+        <div class="frame-label">Each rule appears as a bold card — numbered, black on yellow</div>
+      </div>
+      <div class="frame">
+        <div class="frame-emoji">🚫</div>
+        <div class="frame-visual">Do/Don't Split</div>
+        <div class="frame-label">Left: correct behavior. Right: red X over incorrect behavior</div>
+      </div>
+      <p class="visual-notes"><strong>Style:</strong> Bold rule number in a yellow circle. Rule title in all-caps. Brief explanation below. Use motion: each card slides in sequentially. Icon at top right for visual interest.</p>
+    </div>
+    <div class="script-col">
+      <h3>Script</h3>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Section Title Card</div>
+        <div class="headline">GENERAL SHOP RULES</div>
+        <p style="color:var(--mid); font-size:0.85rem;">The 8 Non-Negotiables</p>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration</div>
+        <p>Before anything else: every person in this shop follows the same rules, every single time. These aren't suggestions — they're the foundation of everyone's safety.</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Rule Cards (sequential)</div>
+        <ul class="bullets">
+          <li><strong>Rule 1 — Authorization First.</strong> Never operate a machine you haven't been trained and authorized to use.</li>
+          <li><strong>Rule 2 — No Distractions.</strong> No phones, headphones, or horseplay when operating equipment.</li>
+          <li><strong>Rule 3 — Dress for It.</strong> No loose clothing, dangling jewelry, or open-toed shoes. Tie back long hair.</li>
+          <li><strong>Rule 4 — Stay Alert.</strong> Never operate machinery while tired, under medication that causes drowsiness, or impaired in any way.</li>
+          <li><strong>Rule 5 — Lock It Out / Tag It Out.</strong> Before performing any maintenance or clearing jams, isolate all energy sources using LOTO procedures.</li>
+          <li><strong>Rule 6 — Keep It Clean.</strong> Clean your workstation before and after use. Chips, oil, and clutter are hazards.</li>
+          <li><strong>Rule 7 — Report Everything.</strong> Near misses, small injuries, equipment issues — report them immediately. No judgment, no exceptions.</li>
+          <li><strong>Rule 8 — Know Your Exits.</strong> Be aware of all emergency exits, fire extinguisher locations, and first aid kits before you start work.</li>
+        </ul>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration</div>
+        <p>These eight rules apply to every person in the shop — from your first day to your thousandth. When in doubt, stop, assess, and ask a supervisor. There's no such thing as a stupid safety question.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE 3 -->
+<div class="scene" id="s3">
+  <div class="scene-header">
+    <div class="scene-num">03</div>
+    <div class="scene-title">Personal Protective Equipment (PPE) — Overview</div>
+    <div class="scene-meta">
+      <span>⏱ ~2.5 min</span>
+      <span>🎬 PPE Intro</span>
+    </div>
+  </div>
+  <div class="scene-body">
+    <div class="storyboard">
+      <h3>Storyboard</h3>
+      <div class="frame">
+        <div class="frame-emoji">🦺</div>
+        <div class="frame-visual">PPE Body Map</div>
+        <div class="frame-label">Silhouette of a person with labeled callouts for each PPE item</div>
+      </div>
+      <div class="frame">
+        <div class="frame-emoji">✅</div>
+        <div class="frame-visual">PPE Checklist</div>
+        <div class="frame-label">Animated checkboxes appearing one by one</div>
+      </div>
+      <p class="visual-notes"><strong>Style:</strong> Use a human silhouette with color-coded zones — head (blue), eyes (yellow), ears (green), hands (orange), feet (red). Each zone highlights as it's mentioned.</p>
+    </div>
+    <div class="script-col">
+      <h3>Script</h3>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Section Title Card</div>
+        <div class="headline">PERSONAL PROTECTIVE<br>EQUIPMENT</div>
+        <p style="color:var(--mid); font-size:0.85rem;">Your Last Line of Defense</p>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration</div>
+        <p>PPE doesn't prevent accidents — but it's often what stands between an incident and a serious injury. Think of it as your personal armor. It only works when you wear it — every time.</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 PPE Checklist — Required at All Times</div>
+        <ul class="bullets">
+          <li>👓 <strong>Safety Glasses or Goggles</strong> — ANSI Z87.1 rated. Required on the shop floor.</li>
+          <li>🦺 <strong>Safety Footwear</strong> — Steel-toed boots or shoes with slip-resistant soles.</li>
+          <li>🧤 <strong>Gloves</strong> — Cut-resistant for handling stock. Remove when operating rotating equipment.</li>
+          <li>🎧 <strong>Hearing Protection</strong> — Required in designated high-noise zones (&gt;85 dB).</li>
+          <li>😷 <strong>Respiratory Protection</strong> — Required when machining materials that produce fine dust or fumes (e.g., aluminum, composites).</li>
+        </ul>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration</div>
+        <p>Note: gloves are critical for material handling, but should NEVER be worn while operating rotating equipment like lathes or drill presses. A spinning shaft can catch a glove and pull your hand in before you can react. Know when to wear them — and when to take them off.</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Warning Highlight</div>
+        <div class="warning-tag">⚠ Critical</div>
+        <p><strong>NEVER wear gloves while operating lathes, mills, or drill presses.</strong><br>
+        Rotating machinery can grab loose material instantly.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE 4 -->
+<div class="scene" id="s4">
+  <div class="scene-header">
+    <div class="scene-num">04</div>
+    <div class="scene-title">Eye &amp; Face Protection — Deep Dive</div>
+    <div class="scene-meta">
+      <span>⏱ ~2 min</span>
+      <span>🎬 PPE Detail</span>
+    </div>
+  </div>
+  <div class="scene-body">
+    <div class="storyboard">
+      <h3>Storyboard</h3>
+      <div class="frame">
+        <div class="frame-emoji">👓</div>
+        <div class="frame-visual">Side-by-Side Comparison</div>
+        <div class="frame-label">Glasses vs. goggles vs. face shield — when to use each</div>
+      </div>
+      <div class="frame">
+        <div class="frame-emoji">🔍</div>
+        <div class="frame-visual">Inspection Demo</div>
+        <div class="frame-label">Close-up of checking glasses for scratches, damage, stamp</div>
+      </div>
+      <p class="visual-notes"><strong>Style:</strong> Three-column layout showing each type of eye protection with a green checkmark for recommended tasks. Red background for "not appropriate for this task" scenarios.</p>
+    </div>
+    <div class="script-col">
+      <h3>Script</h3>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Section Header</div>
+        <div class="headline">EYE PROTECTION:<br>CHOOSE THE RIGHT TOOL</div>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration</div>
+        <p>Eye injuries are among the most common — and most preventable — injuries in machine shops. Flying chips, sparks, coolant, and fine particulates can cause permanent damage in milliseconds.</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Protection Types</div>
+        <ul class="bullets">
+          <li><strong>Safety Glasses</strong> — Everyday use on the shop floor. Must be ANSI Z87.1+ rated. Protects from impact, chips.</li>
+          <li><strong>Splash Goggles</strong> — Required when working with coolants, cutting fluids, or chemicals. Sealed against the face.</li>
+          <li><strong>Face Shield</strong> — Required for grinding operations. Worn OVER safety glasses, not instead of them.</li>
+        </ul>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Inspect Before Use</div>
+        <ul class="bullets">
+          <li>Check for cracks, scratches, or distortion</li>
+          <li>Look for the ANSI Z87.1 marking on the lens or frame</li>
+          <li>Damaged eyewear must be replaced — never worn</li>
+          <li>Shared eyewear must be sanitized before use</li>
+        </ul>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration</div>
+        <p>If you're ever unsure which level of eye protection a task requires, err on the side of more protection — or ask your supervisor before starting. Your vision is irreplaceable.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE 5 -->
+<div class="scene" id="s5">
+  <div class="scene-header">
+    <div class="scene-num">05</div>
+    <div class="scene-title">Hazard Awareness</div>
+    <div class="scene-meta">
+      <span>⏱ ~3.5 min</span>
+      <span>🎬 Hazard ID</span>
+    </div>
+  </div>
+  <div class="scene-body">
+    <div class="storyboard">
+      <h3>Storyboard</h3>
+      <div class="frame">
+        <div class="frame-emoji">⚠️</div>
+        <div class="frame-visual">Hazard Grid</div>
+        <div class="frame-label">4-quadrant layout: mechanical, chemical, electrical, ergonomic</div>
+      </div>
+      <div class="frame">
+        <div class="frame-emoji">🔥</div>
+        <div class="frame-visual">Hot chip warning</div>
+        <div class="frame-label">Animated chip path from lathe tool, highlighting danger zone</div>
+      </div>
+      <p class="visual-notes"><strong>Style:</strong> Each hazard type gets a color-coded card: red (mechanical), orange (chemical/fire), yellow (electrical), blue (ergonomic). Icons from a consistent icon set. Animated "caution zone" rings around hazard areas.</p>
+    </div>
+    <div class="script-col">
+      <h3>Script</h3>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Section Title</div>
+        <div class="headline">KNOW YOUR HAZARDS</div>
+        <p style="color:var(--mid);">See it. Name it. Control it.</p>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration</div>
+        <p>Hazard awareness is the ability to recognize risks before they become accidents. In a machine shop, hazards come in four main categories. Let's walk through each.</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Hazard Type 1 — Mechanical (Red)</div>
+        <div class="warning-tag">🔴 Mechanical</div>
+        <ul class="bullets">
+          <li>Rotating parts: spindles, chucks, shafts, gears</li>
+          <li>Sharp cutting tools and edges</li>
+          <li>Hot metal chips (can exceed 500°C)</li>
+          <li>Flying debris from grinding operations</li>
+          <li>Pinch points on presses and clamps</li>
+        </ul>
+        <p style="margin-top:0.5rem; font-size:0.85rem; color:var(--mid);">Control: machine guards, proper work-holding, no bypass of safety interlocks</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Hazard Type 2 — Chemical (Orange)</div>
+        <div class="warning-tag">🟠 Chemical / Fire</div>
+        <ul class="bullets">
+          <li>Cutting fluids and coolants — skin irritants, slipping hazard</li>
+          <li>Machining oils and lubricants</li>
+          <li>Metal dust from aluminum, magnesium — combustion risk</li>
+          <li>Solvent vapors from cleaning agents</li>
+        </ul>
+        <p style="margin-top:0.5rem; font-size:0.85rem; color:var(--mid);">Control: ventilation, proper storage, no open flames near machining fluids, SDS sheets available</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Hazard Type 3 — Electrical (Yellow)</div>
+        <div class="warning-tag">🟡 Electrical</div>
+        <ul class="bullets">
+          <li>Damaged power cords or plugs</li>
+          <li>Water/coolant near electrical panels</li>
+          <li>Unauthorized electrical work</li>
+          <li>Overloaded circuits</li>
+        </ul>
+        <p style="margin-top:0.5rem; font-size:0.85rem; color:var(--mid);">Control: inspect cords before use, report damage immediately, LOTO before any electrical work</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Hazard Type 4 — Ergonomic (Blue)</div>
+        <div class="warning-tag">🔵 Ergonomic</div>
+        <ul class="bullets">
+          <li>Repetitive motion: gripping, twisting, hand-arm vibration</li>
+          <li>Awkward postures during setup or inspection</li>
+          <li>Heavy lifting — stock material, fixtures, vises</li>
+          <li>Standing on hard concrete for long periods</li>
+        </ul>
+        <p style="margin-top:0.5rem; font-size:0.85rem; color:var(--mid);">Control: use lifting aids, rotate tasks, anti-fatigue mats, ask for help with loads &gt;50 lbs</p>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration</div>
+        <p>You'll learn the specific hazards of each machine during your machine-specific training. For now, practice the habit of "Stop — Look — Think" before starting any new task: identify potential hazards, confirm controls are in place, then proceed.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE 6 -->
+<div class="scene" id="s6">
+  <div class="scene-header">
+    <div class="scene-num">06</div>
+    <div class="scene-title">Emergency Procedures</div>
+    <div class="scene-meta">
+      <span>⏱ ~3 min</span>
+      <span>🎬 Emergency</span>
+    </div>
+  </div>
+  <div class="scene-body">
+    <div class="storyboard">
+      <h3>Storyboard</h3>
+      <div class="frame">
+        <div class="frame-emoji">🚨</div>
+        <div class="frame-visual">Emergency Map</div>
+        <div class="frame-label">Shop floor layout showing E-stops, exits, first aid, extinguishers</div>
+      </div>
+      <div class="frame">
+        <div class="frame-emoji">🔴</div>
+        <div class="frame-visual">E-Stop Close-Up</div>
+        <div class="frame-label">Red mushroom E-stop button, prominently highlighted</div>
+      </div>
+      <p class="visual-notes"><strong>Style:</strong> Red/black color scheme for urgency. Bold, short sentences. Each scenario gets a distinct visual — fire uses flame-colored background, injury uses a clean medical cross icon. The E-stop button should be visually emphasized with a pulse animation.</p>
+    </div>
+    <div class="script-col">
+      <h3>Script</h3>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Section Title Card (Red Background)</div>
+        <div class="headline" style="color:var(--orange);">EMERGENCY<br>PROCEDURES</div>
+        <p style="color:var(--mid);">Know these before you need them.</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Emergency Stop (E-Stop)</div>
+        <div class="warning-tag">⚠ Critical Knowledge</div>
+        <ul class="bullets">
+          <li>Every machine has a red E-stop button — know where it is <em>before</em> you start</li>
+          <li>Pressing E-stop immediately cuts power to the machine</li>
+          <li>Use it for: entanglement, uncontrolled operation, or any imminent danger</li>
+          <li>After use, do NOT restart machine — report to supervisor first</li>
+        </ul>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Scenario: Injury or Medical Emergency</div>
+        <ul class="bullets">
+          <li><strong>Step 1:</strong> Stop the machine immediately (E-stop or switch off)</li>
+          <li><strong>Step 2:</strong> Call for help — shout, or use the emergency intercom</li>
+          <li><strong>Step 3:</strong> Do NOT move an injured person unless they are in immediate danger</li>
+          <li><strong>Step 4:</strong> Send someone to meet emergency services at the entrance</li>
+          <li><strong>Step 5:</strong> Preserve the scene for incident investigation</li>
+        </ul>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Scenario: Fire</div>
+        <ul class="bullets">
+          <li>Sound the fire alarm immediately</li>
+          <li>Evacuate — use nearest emergency exit, do not use elevators</li>
+          <li>Only use a fire extinguisher if the fire is small, you have an exit behind you, and you're trained to use it (PASS: Pull, Aim, Squeeze, Sweep)</li>
+          <li>Muster point: [identify on facility map]</li>
+          <li>Account for all personnel before giving all-clear</li>
+        </ul>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Scenario: Chemical Spill</div>
+        <ul class="bullets">
+          <li>Alert coworkers and clear the area</li>
+          <li>Do NOT walk through the spill</li>
+          <li>Consult the Safety Data Sheet (SDS) — located at [location]</li>
+          <li>Report to supervisor and use designated spill kit</li>
+          <li>For skin/eye contact: flush with water for 15+ minutes at emergency eyewash station</li>
+        </ul>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration</div>
+        <p>Your supervisor will walk you through this facility's specific emergency contacts, muster points, and first aid locations during your orientation. Write them down. Store them in your phone. Know them before day one.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE 7 -->
+<div class="scene" id="s7">
+  <div class="scene-header">
+    <div class="scene-num">07</div>
+    <div class="scene-title">Recap &amp; Sign-Off</div>
+    <div class="scene-meta">
+      <span>⏱ ~1.5 min</span>
+      <span>🎬 Closing</span>
+    </div>
+  </div>
+  <div class="scene-body">
+    <div class="storyboard">
+      <h3>Storyboard</h3>
+      <div class="frame">
+        <div class="frame-emoji">✅</div>
+        <div class="frame-visual">Recap Checklist</div>
+        <div class="frame-label">Five key takeaways animate in one by one on screen</div>
+      </div>
+      <div class="frame">
+        <div class="frame-emoji">🤝</div>
+        <div class="frame-visual">Call to Action</div>
+        <div class="frame-label">Bold text: "Safety is everyone's job." Quiz prompt below.</div>
+      </div>
+      <p class="visual-notes"><strong>Style:</strong> Return to yellow-on-black from opener. Upbeat close. Checkmarks animate in beside each point. End on the company logo / training confirmation graphic.</p>
+    </div>
+    <div class="script-col">
+      <h3>Script</h3>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Recap Title</div>
+        <div class="headline">LET'S RECAP</div>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Key Takeaways (animated checkmarks)</div>
+        <ul class="bullets">
+          <li>✅ Follow all 8 general shop rules — every day, no exceptions</li>
+          <li>✅ Wear the right PPE for every task — always inspect before use</li>
+          <li>✅ Identify the 4 hazard types and know how to control them</li>
+          <li>✅ Know where your E-stops, exits, and first aid are before you start</li>
+          <li>✅ Report everything — near misses, incidents, equipment issues</li>
+        </ul>
+      </div>
+      <div class="text-block narration">
+        <div class="block-label">🎙 Narration</div>
+        <p>Safety is a mindset, not a checklist. The most skilled machinists in this shop are also the most safety-conscious. Your experience level doesn't matter — your habits do. Welcome to the team, and welcome to a shop where everyone looks out for each other.</p>
+      </div>
+      <div class="text-block on-screen">
+        <div class="block-label">📺 Closing Card</div>
+        <div class="headline">SAFETY IS<br>EVERYONE'S JOB.</div>
+        <p style="color:var(--mid); margin-top:0.5rem;">Complete the post-video quiz to earn your training certificate.<br>Questions? Ask your supervisor.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>Machine Shop Safety Training — Script &amp; Storyboard v1.0</span>
+  <span>7 Scenes · 15–18 Min Estimated Runtime · New Employee Orientation</span>
+</footer>
+
+</body>
+</html>
