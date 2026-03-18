@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Shop Safety — Handout &amp; Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root {
+    --black: #0f0f0f;
+    --steel: #1c2333;
+    --yellow: #f5c518;
+    --orange: #e85d04;
+    --red: #dc2626;
+    --green: #16a34a;
+    --white: #f8f6f0;
+    --mid: #8a8f9e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+  }
+
+  /* TAB NAVIGATION */
+  .tabs {
+    display: flex;
+    background: var(--steel);
+    border-bottom: 3px solid var(--yellow);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .tab-btn {
+    padding: 1rem 2.5rem;
+    background: none;
+    border: none;
+    color: var(--mid);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+  }
+
+  .tab-btn.active {
+    color: var(--yellow);
+    border-bottom-color: var(--yellow);
+  }
+
+  .tab-btn:hover { color: var(--white); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ========== HANDOUT ========== */
+  .handout {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  .handout-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 3px solid var(--yellow);
+  }
+
+  .handout-header h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .handout-header p {
+    color: var(--mid);
+    font-size: 0.9rem;
+  }
+
+  .section-block {
+    margin-bottom: 2rem;
+  }
+
+  .section-block h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--yellow);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid #2a3042;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  .info-item {
+    background: var(--steel);
+    border-radius: 5px;
+    padding: 0.65rem 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    border-left: 3px solid var(--yellow);
+  }
+
+  .info-item .num {
+    background: var(--yellow);
+    color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 0.85rem;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .info-item .txt strong {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.1rem;
+  }
+
+  .info-item .txt span {
+    font-size: 0.78rem;
+    color: var(--mid);
+    line-height: 1.4;
+  }
+
+  .ppe-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.6rem;
+  }
+
+  .ppe-box {
+    background: var(--steel);
+    border-radius: 5px;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    border-top: 2px solid var(--yellow);
+  }
+
+  .ppe-box .icon { font-size: 1.6rem; margin-bottom: 0.3rem; }
+  .ppe-box .name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.2rem;
+  }
+  .ppe-box .note { font-size: 0.65rem; color: var(--mid); line-height: 1.3; }
+
+  .hazard-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  .hz-box {
+    border-radius: 5px;
+    padding: 0.75rem 1rem;
+    border-left: 4px solid;
+  }
+  .hz-box.red { background: rgba(220,38,38,0.1); border-color: #ef4444; }
+  .hz-box.orange { background: rgba(232,93,4,0.1); border-color: var(--orange); }
+  .hz-box.yellow { background: rgba(245,197,24,0.08); border-color: var(--yellow); }
+  .hz-box.blue { background: rgba(59,130,246,0.1); border-color: #60a5fa; }
+
+  .hz-box h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .hz-box.red h3 { color: #ef4444; }
+  .hz-box.orange h3 { color: var(--orange); }
+  .hz-box.yellow h3 { color: var(--yellow); }
+  .hz-box.blue h3 { color: #60a5fa; }
+
+  .hz-box ul {
+    list-style: none;
+    font-size: 0.75rem;
+    color: #8a9aaa;
+    line-height: 1.5;
+  }
+  .hz-box ul li::before { content: '→ '; color: var(--mid); }
+
+  .emerg-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  .em-box {
+    background: var(--steel);
+    border-radius: 5px;
+    padding: 0.75rem 1rem;
+    border-top: 3px solid var(--orange);
+  }
+
+  .em-box h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+  }
+
+  .em-box ol {
+    padding-left: 1.2rem;
+    font-size: 0.75rem;
+    color: #8a9aaa;
+    line-height: 1.6;
+  }
+
+  .signature-box {
+    background: var(--steel);
+    border-radius: 5px;
+    padding: 1.2rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    border: 1px dashed #3a4555;
+  }
+
+  .sig-field label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mid);
+    margin-bottom: 0.5rem;
+  }
+
+  .sig-line {
+    border-bottom: 1px solid #4a5565;
+    height: 1.8rem;
+  }
+
+  .warning-box {
+    background: rgba(232,93,4,0.12);
+    border: 1px solid rgba(232,93,4,0.3);
+    border-radius: 5px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .warning-box .w-icon { font-size: 1.2rem; flex-shrink: 0; }
+  .warning-box p { font-size: 0.82rem; line-height: 1.5; }
+  .warning-box strong { color: var(--orange); }
+
+  /* ========== QUIZ ========== */
+  .quiz-wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  .quiz-header {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .quiz-header h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .quiz-header p { color: var(--mid); margin-top: 0.4rem; }
+
+  .score-bar {
+    background: var(--steel);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  .score-display {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--yellow);
+  }
+
+  .score-label { font-size: 0.85rem; color: var(--mid); }
+
+  .progress-bar-outer {
+    flex: 1;
+    margin: 0 1.5rem;
+    background: #0f0f0f;
+    border-radius: 20px;
+    height: 8px;
+    overflow: hidden;
+  }
+
+  .progress-bar-inner {
+    height: 100%;
+    background: var(--yellow);
+    border-radius: 20px;
+    transition: width 0.3s;
+    width: 0%;
+  }
+
+  .q-card {
+    background: var(--steel);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.2rem;
+    border-left: 4px solid #2a3042;
+    transition: border-color 0.2s;
+  }
+
+  .q-card.correct { border-left-color: var(--green); }
+  .q-card.incorrect { border-left-color: var(--red); }
+
+  .q-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mid);
+    margin-bottom: 0.5rem;
+  }
+
+  .q-text {
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    color: var(--white);
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .option-btn {
+    background: #12161f;
+    border: 1px solid #2a3042;
+    color: var(--white);
+    border-radius: 5px;
+    padding: 0.65rem 1rem;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.88rem;
+    transition: background 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .option-btn:hover:not([disabled]) {
+    background: #1a2030;
+    border-color: var(--yellow);
+  }
+
+  .option-btn.correct-ans {
+    background: rgba(22,163,74,0.15);
+    border-color: var(--green);
+    color: #4ade80;
+  }
+
+  .option-btn.wrong-ans {
+    background: rgba(220,38,38,0.15);
+    border-color: var(--red);
+    color: #f87171;
+  }
+
+  .option-btn .opt-letter {
+    background: #2a3042;
+    border-radius: 3px;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .q-feedback {
+    display: none;
+    margin-top: 0.75rem;
+    border-radius: 5px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.83rem;
+    line-height: 1.5;
+  }
+
+  .q-feedback.show { display: block; }
+  .q-feedback.pass { background: rgba(22,163,74,0.12); color: #4ade80; border: 1px solid rgba(22,163,74,0.2); }
+  .q-feedback.fail { background: rgba(220,38,38,0.12); color: #f87171; border: 1px solid rgba(220,38,38,0.2); }
+
+  .quiz-footer {
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+
+  .quiz-result-box {
+    background: var(--steel);
+    border-radius: 10px;
+    padding: 2rem;
+    display: none;
+    text-align: center;
+  }
+
+  .quiz-result-box.show { display: block; }
+
+  .result-score {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .result-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0.5rem 0;
+  }
+
+  .result-pass { color: #4ade80; }
+  .result-fail { color: #f87171; }
+
+  .result-msg { color: var(--mid); font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+  .reset-btn {
+    background: var(--yellow);
+    color: var(--black);
+    border: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.65rem 2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .reset-btn:hover { opacity: 0.85; }
+
+  @media print {
+    .tabs, .tab-panel.quiz-tab { display: none !important; }
+    .tab-panel.handout-tab { display: block !important; }
+    body { background: white; color: black; }
+  }
+</style>
+</head>
+<body>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('handout')">📄 Reference Handout</button>
+  <button class="tab-btn" onclick="showTab('quiz')">📝 Knowledge Quiz</button>
+</div>
+
+<!-- HANDOUT PANEL -->
+<div class="tab-panel handout-tab active" id="handout">
+<div class="handout">
+  <div class="handout-header">
+    <h1>Machine Shop Safety<br>Quick Reference</h1>
+    <p>New Employee Orientation · Keep this for reference · Print-friendly</p>
+  </div>
+
+  <!-- General Rules -->
+  <div class="section-block">
+    <h2>⚙️ The 8 General Shop Rules</h2>
+    <div class="info-grid">
+      <div class="info-item"><div class="num">1</div><div class="txt"><strong>Authorization First</strong><span>Never operate equipment you haven't been trained to use.</span></div></div>
+      <div class="info-item"><div class="num">2</div><div class="txt"><strong>No Distractions</strong><span>No phones or headphones when operating equipment.</span></div></div>
+      <div class="info-item"><div class="num">3</div><div class="txt"><strong>Dress for It</strong><span>No loose clothing, jewelry, or open-toed shoes. Tie back hair.</span></div></div>
+      <div class="info-item"><div class="num">4</div><div class="txt"><strong>Stay Alert</strong><span>Never operate machinery while tired, drowsy, or impaired.</span></div></div>
+      <div class="info-item"><div class="num">5</div><div class="txt"><strong>LOTO</strong><span>Lock Out / Tag Out before any maintenance or jam clearing.</span></div></div>
+      <div class="info-item"><div class="num">6</div><div class="txt"><strong>Keep It Clean</strong><span>Clean workstation before and after use. Chips &amp; oil = hazards.</span></div></div>
+      <div class="info-item"><div class="num">7</div><div class="txt"><strong>Report Everything</strong><span>Near misses, injuries, equipment issues — report immediately.</span></div></div>
+      <div class="info-item"><div class="num">8</div><div class="txt"><strong>Know Your Exits</strong><span>Know emergency exits, extinguisher &amp; first aid locations.</span></div></div>
+    </div>
+  </div>
+
+  <!-- PPE -->
+  <div class="section-block">
+    <h2>🦺 Required PPE</h2>
+    <div class="warning-box">
+      <div class="w-icon">⚠️</div>
+      <p><strong>Critical:</strong> Never wear gloves while operating rotating equipment (lathes, mills, drill presses). A rotating shaft can grab a glove and pull your hand in before you can react.</p>
+    </div>
+    <div class="ppe-row">
+      <div class="ppe-box"><div class="icon">👓</div><div class="name">Safety Glasses</div><div class="note">ANSI Z87.1+<br>Required on floor</div></div>
+      <div class="ppe-box"><div class="icon">👢</div><div class="name">Safety Boots</div><div class="note">Steel-toed<br>Slip-resistant</div></div>
+      <div class="ppe-box"><div class="icon">🧤</div><div class="name">Gloves</div><div class="note">Material handling only<br>Remove near rotating parts</div></div>
+      <div class="ppe-box"><div class="icon">🎧</div><div class="name">Hearing</div><div class="note">Zones &gt;85 dB<br>Check posted signs</div></div>
+      <div class="ppe-box"><div class="icon">😷</div><div class="name">Respiratory</div><div class="note">Dust/fume operations<br>Ask supervisor</div></div>
+    </div>
+  </div>
+
+  <!-- Hazards -->
+  <div class="section-block">
+    <h2>⚠️ 4 Hazard Categories</h2>
+    <div class="hazard-row">
+      <div class="hz-box red">
+        <h3>🔴 Mechanical</h3>
+        <ul>
+          <li>Rotating spindles, chucks, shafts</li>
+          <li>Sharp cutting tools &amp; edges</li>
+          <li>Hot chips (&gt;500°C) &amp; grinding debris</li>
+        </ul>
+      </div>
+      <div class="hz-box orange">
+        <h3>🟠 Chemical / Fire</h3>
+        <ul>
+          <li>Cutting fluids — skin &amp; slip hazard</li>
+          <li>Metal dust — combustion risk</li>
+          <li>SDS sheets must be accessible</li>
+        </ul>
+      </div>
+      <div class="hz-box yellow">
+        <h3>🟡 Electrical</h3>
+        <ul>
+          <li>Damaged cords or plugs</li>
+          <li>Coolant near electrical panels</li>
+          <li>Use LOTO for all electrical work</li>
+        </ul>
+      </div>
+      <div class="hz-box blue">
+        <h3>🔵 Ergonomic</h3>
+        <ul>
+          <li>Repetitive gripping &amp; twisting</li>
+          <li>Heavy lifting — get help for &gt;50 lbs</li>
+          <li>Long standing — use anti-fatigue mats</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emergency -->
+  <div class="section-block">
+    <h2>🚨 Emergency Procedures</h2>
+    <div class="emerg-row">
+      <div class="em-box">
+        <h3>🔴 Machine Hazard</h3>
+        <ol>
+          <li>Hit E-stop immediately</li>
+          <li>Clear the area</li>
+          <li>Notify supervisor</li>
+          <li>Do not restart machine</li>
+        </ol>
+      </div>
+      <div class="em-box">
+        <h3>🚑 Injury / Medical</h3>
+        <ol>
+          <li>Stop machine, call for help</li>
+          <li>Do not move injured person</li>
+          <li>Send someone to meet EMS</li>
+          <li>Preserve the scene</li>
+        </ol>
+      </div>
+      <div class="em-box">
+        <h3>🔥 Fire</h3>
+        <ol>
+          <li>Sound the fire alarm</li>
+          <li>Evacuate via nearest exit</li>
+          <li>Use PASS technique if trained</li>
+          <li>Report to muster point</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- Facility Info + Signature -->
+  <div class="section-block">
+    <h2>📍 Facility Information (Complete at Orientation)</h2>
+    <div class="info-grid" style="margin-bottom:0.6rem;">
+      <div class="info-item"><div class="txt"><strong>Supervisor Name</strong><span style="display:block; border-bottom:1px solid #3a4555; height:1.2rem; margin-top:0.3rem;"></span></div></div>
+      <div class="info-item"><div class="txt"><strong>Emergency Contact #</strong><span style="display:block; border-bottom:1px solid #3a4555; height:1.2rem; margin-top:0.3rem;"></span></div></div>
+      <div class="info-item"><div class="txt"><strong>First Aid Kit Location</strong><span style="display:block; border-bottom:1px solid #3a4555; height:1.2rem; margin-top:0.3rem;"></span></div></div>
+      <div class="info-item"><div class="txt"><strong>Fire Muster Point</strong><span style="display:block; border-bottom:1px solid #3a4555; height:1.2rem; margin-top:0.3rem;"></span></div></div>
+    </div>
+  </div>
+
+  <div class="signature-box">
+    <div class="sig-field">
+      <label>Employee Name (Print)</label>
+      <div class="sig-line"></div>
+    </div>
+    <div class="sig-field">
+      <label>Employee Signature</label>
+      <div class="sig-line"></div>
+    </div>
+    <div class="sig-field">
+      <label>Date of Completion</label>
+      <div class="sig-line"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- QUIZ PANEL -->
+<div class="tab-panel" id="quiz">
+<div class="quiz-wrap">
+  <div class="quiz-header">
+    <h1>Knowledge Check</h1>
+    <p>15 questions · 80% required to pass · Select the best answer for each question</p>
+  </div>
+
+  <div class="score-bar">
+    <div>
+      <div class="score-display" id="scoreDisplay">0/15</div>
+      <div class="score-label">Correct Answers</div>
+    </div>
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner" id="progressBar"></div>
+    </div>
+    <div style="text-align:right">
+      <div class="score-display" id="pctDisplay" style="font-size:1.8rem">0%</div>
+      <div class="score-label">Score</div>
+    </div>
+  </div>
+
+  <div id="questionsContainer"></div>
+
+  <div class="quiz-result-box" id="resultBox">
+    <div class="result-score" id="resultScore"></div>
+    <div class="result-label" id="resultLabel"></div>
+    <div class="result-msg" id="resultMsg"></div>
+    <button class="reset-btn" onclick="resetQuiz()">Retake Quiz</button>
+  </div>
+</div>
+</div>
+
+<script>
+  function showTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  const questions = [
+    {
+      q: "Which of the following is required before operating any machine in the shop?",
+      options: ["A completed safety checklist", "Authorization and specific training on that machine", "A minimum of 6 months experience", "Supervisor presence at all times"],
+      correct: 1,
+      explanation: "You must be trained and authorized for each specific piece of equipment before operating it — regardless of experience level."
+    },
+    {
+      q: "You're setting up a lathe job and about to start machining. Which PPE should you REMOVE before pressing start?",
+      options: ["Safety glasses", "Steel-toed boots", "Cut-resistant gloves", "Hearing protection"],
+      correct: 2,
+      explanation: "Gloves must NEVER be worn when operating rotating equipment. A spinning chuck can grab a glove and pull your hand in before you can react."
+    },
+    {
+      q: "A machine starts making an unusual grinding noise while in operation. What should you do first?",
+      options: ["Continue running and monitor for a few minutes", "Press the E-stop and notify your supervisor", "Reduce the feed rate and continue", "Check the manual while the machine runs"],
+      correct: 1,
+      explanation: "Unusual sounds indicate a potential problem. Stop the machine immediately using the E-stop and notify your supervisor before continuing."
+    },
+    {
+      q: "What does LOTO stand for, and when is it required?",
+      options: ["Lock Out / Turn Off — required at end of shift", "Lock Out / Tag Out — required before maintenance or clearing jams", "Log Off / Tag Out — required when leaving the machine", "Lock Out / Tag Out — required only for electrical repairs"],
+      correct: 1,
+      explanation: "LOTO (Lock Out / Tag Out) must be used whenever you perform any maintenance, adjustment, or jam clearing — to isolate all energy sources."
+    },
+    {
+      q: "Which eye protection is required when grinding operations are being performed?",
+      options: ["Safety glasses alone are sufficient", "A face shield worn over safety glasses", "A face shield worn instead of safety glasses", "Splash goggles only"],
+      correct: 1,
+      explanation: "For grinding, a face shield is required — but it must be worn OVER safety glasses, not instead of them."
+    },
+    {
+      q: "You notice a small amount of cutting fluid has spilled on the floor near a machine. What is the correct action?",
+      options: ["Step around it and continue working", "Clean it up immediately and report it if significant", "Cover it with a rag and address it at end of shift", "Ignore it — small spills are normal"],
+      correct: 1,
+      explanation: "Spills create both slip hazards and fire risks. Clean them up immediately and report significant spills to your supervisor."
+    },
+    {
+      q: "Metal dust from machining magnesium or aluminum presents which specific hazard that other metal dusts typically do not?",
+      options: ["Extreme toxicity when inhaled", "Combustion / explosion risk", "Electrical conductivity hazard", "High thermal radiation"],
+      correct: 1,
+      explanation: "Aluminum and magnesium dust can be combustible and in some concentrations explosive. Proper ventilation and no open flames are critical."
+    },
+    {
+      q: "A co-worker is injured and their arm appears to be caught under a piece of material. What should you do?",
+      options: ["Carefully try to free them yourself", "Do not move them unless they are in immediate additional danger — call for help", "Drag them to a safe area immediately", "Wait for the machine to complete its cycle"],
+      correct: 1,
+      explanation: "Do not move an injured person — you could worsen spinal or other injuries. Call for help, send someone to meet emergency services, and preserve the scene."
+    },
+    {
+      q: "What is the ANSI Z87.1 standard for?",
+      options: ["Machine guarding specifications", "Eye and face protection rating", "Steel-toed footwear protection level", "Hearing protection noise reduction ratings"],
+      correct: 1,
+      explanation: "ANSI Z87.1 is the American National Standard for eye and face protection. All safety glasses and goggles on the shop floor must meet this standard."
+    },
+    {
+      q: "Which of the following best describes a 'near miss'?",
+      options: ["An incident that caused minor injury only", "An event that could have caused injury or damage but did not", "A machine malfunction that was caught during inspection", "Damage to equipment with no personal injury"],
+      correct: 1,
+      explanation: "A near miss is any unplanned event that could have resulted in injury, illness, or damage but did not. All near misses must be reported — they reveal hazards before they cause harm."
+    },
+    {
+      q: "When using a fire extinguisher, what does the 'S' in the PASS technique stand for?",
+      options: ["Stand back from the fire", "Squeeze the handle", "Sweep the nozzle at the base of the fire", "Signal for help"],
+      correct: 2,
+      explanation: "PASS = Pull the pin, Aim at the base, Squeeze the handle, Sweep side to side at the base of the fire."
+    },
+    {
+      q: "Which type of hazard would best describe developing tendinitis from repetitive gripping at a CNC machine?",
+      options: ["Mechanical hazard", "Chemical hazard", "Ergonomic hazard", "Electrical hazard"],
+      correct: 2,
+      explanation: "Repetitive motion injuries are ergonomic hazards. Task rotation, proper tool grip, and vibration dampening are key controls."
+    },
+    {
+      q: "You're cleaning up after a shift and notice a power cord for a grinder has exposed wiring. What should you do?",
+      options: ["Wrap it with electrical tape and continue use", "Report it to your supervisor and tag it out of service immediately", "Switch to a different outlet to reduce strain on the cord", "Use the grinder for one more shift and then report it"],
+      correct: 1,
+      explanation: "Damaged electrical equipment must be immediately tagged out of service and reported. Never attempt to repair cords yourself or continue using damaged equipment."
+    },
+    {
+      q: "What is the recommended minimum duration for flushing skin or eyes after contact with cutting fluid or a chemical?",
+      options: ["30 seconds under cold water", "2–3 minutes at the nearest sink", "15 minutes at an emergency eyewash station", "5 minutes, then apply bandaging"],
+      correct: 2,
+      explanation: "Emergency eyewash stations and safety showers require a minimum of 15 minutes of continuous flushing to adequately remove chemical contaminants."
+    },
+    {
+      q: "You finish operating a milling machine. According to the 8 general shop rules, what must you do before leaving?",
+      options: ["Park the tool in the home position only", "Clean your workstation and remove chips, oil, and clutter", "Lock the machine cabinet and leave the coolant running", "Sign the machine log and proceed to next task"],
+      correct: 1,
+      explanation: "Rule 6: Keep It Clean. Clean your workstation before and after use. Chips, oil, and clutter are all hazards for the next person using the machine."
+    }
+  ];
+
+  let answered = 0;
+  let correct = 0;
+  const total = questions.length;
+
+  function buildQuiz() {
+    const container = document.getElementById('questionsContainer');
+    container.innerHTML = '';
+    answered = 0;
+    correct = 0;
+    updateScore();
+
+    questions.forEach((q, qi) => {
+      const card = document.createElement('div');
+      card.className = 'q-card';
+      card.id = 'q' + qi;
+
+      const letters = ['A', 'B', 'C', 'D'];
+
+      card.innerHTML = `
+        <div class="q-num">Question ${qi + 1} of ${total}</div>
+        <div class="q-text">${q.q}</div>
+        <div class="options" id="opts${qi}">
+          ${q.options.map((opt, oi) => `
+            <button class="option-btn" onclick="answer(${qi}, ${oi})">
+              <span class="opt-letter">${letters[oi]}</span>
+              ${opt}
+            </button>
+          `).join('')}
+        </div>
+        <div class="q-feedback" id="fb${qi}"></div>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+  function answer(qi, selected) {
+    const q = questions[qi];
+    const card = document.getElementById('q' + qi);
+    const opts = document.getElementById('opts' + qi);
+    const fb = document.getElementById('fb' + qi);
+
+    if (card.classList.contains('correct') || card.classList.contains('incorrect')) return;
+
+    const buttons = opts.querySelectorAll('.option-btn');
+    buttons.forEach(b => b.disabled = true);
+
+    const isCorrect = selected === q.correct;
+    buttons[q.correct].classList.add('correct-ans');
+    if (!isCorrect) buttons[selected].classList.add('wrong-ans');
+
+    card.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+    fb.className = 'q-feedback show ' + (isCorrect ? 'pass' : 'fail');
+    fb.innerHTML = (isCorrect ? '✅ Correct! ' : '❌ Incorrect. ') + q.explanation;
+
+    answered++;
+    if (isCorrect) correct++;
+    updateScore();
+
+    if (answered === total) {
+      setTimeout(showResult, 800);
+    }
+  }
+
+  function updateScore() {
+    document.getElementById('scoreDisplay').textContent = correct + '/' + total;
+    const pct = answered > 0 ? Math.round((correct / total) * 100) : 0;
+    document.getElementById('pctDisplay').textContent = pct + '%';
+    document.getElementById('progressBar').style.width = (answered / total * 100) + '%';
+  }
+
+  function showResult() {
+    const pct = Math.round((correct / total) * 100);
+    const pass = pct >= 80;
+    const box = document.getElementById('resultBox');
+    document.getElementById('resultScore').textContent = pct + '%';
+    document.getElementById('resultScore').className = 'result-score ' + (pass ? 'result-pass' : 'result-fail');
+    document.getElementById('resultLabel').textContent = pass ? '✅ PASSED' : '❌ NEEDS REVIEW';
+    document.getElementById('resultLabel').className = 'result-label ' + (pass ? 'result-pass' : 'result-fail');
+    document.getElementById('resultMsg').textContent = pass
+      ? `Excellent work! You scored ${correct} out of ${total}. You may proceed to receive your training certificate.`
+      : `You scored ${correct} out of ${total}. An 80% score is required. Please review the reference handout and retake the quiz.`;
+    box.classList.add('show');
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function resetQuiz() {
+    document.getElementById('resultBox').classList.remove('show');
+    buildQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  buildQuiz();
+</script>
+</body>
+</html>
