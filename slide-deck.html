@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Shop Safety — Slide Deck</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root {
+    --black: #0d1117;
+    --steel: #1a2236;
+    --yellow: #f5c518;
+    --orange: #e85d04;
+    --white: #f0ede6;
+    --mid: #6e7a8a;
+    --card: #1e2a3a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0d13;
+    font-family: 'Barlow', sans-serif;
+    color: var(--white);
+    min-height: 100vh;
+  }
+
+  .nav-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 48px;
+    background: rgba(10, 13, 19, 0.95);
+    border-bottom: 1px solid #1e2a3a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+  }
+
+  .nav-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--yellow);
+  }
+
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .nav-btn {
+    background: var(--steel);
+    border: none;
+    color: var(--white);
+    padding: 4px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: 'Barlow', sans-serif;
+    transition: background 0.15s;
+  }
+  .nav-btn:hover { background: var(--card); }
+
+  .slide-counter {
+    font-size: 0.85rem;
+    color: var(--mid);
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .slides-wrapper {
+    padding-top: 48px;
+  }
+
+  .slide {
+    width: 100%;
+    min-height: calc(100vw * 9 / 16);
+    max-height: 90vh;
+    display: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide.active { display: flex; }
+
+  /* ========== SLIDE TYPES ========== */
+
+  /* TITLE SLIDE */
+  .slide-title {
+    background: var(--black);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem;
+  }
+
+  .slide-title::before {
+    content: '';
+    position: absolute;
+    top: -20%; left: -10%;
+    width: 60%; height: 140%;
+    background: radial-gradient(ellipse, rgba(245,197,24,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .title-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(0.7rem, 1.5vw, 1rem);
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--yellow);
+    margin-bottom: 1.5rem;
+  }
+
+  .title-main {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(3rem, 9vw, 8rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.9;
+    color: var(--white);
+  }
+
+  .title-main span { color: var(--yellow); }
+
+  .title-sub {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--mid);
+    margin-top: 1.5rem;
+  }
+
+  .title-badge {
+    margin-top: 2.5rem;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .badge {
+    background: var(--steel);
+    border: 1px solid #2a3a50;
+    border-radius: 4px;
+    padding: 0.4rem 1rem;
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    color: var(--mid);
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* SECTION TITLE SLIDE */
+  .slide-section {
+    background: var(--steel);
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 4vw 6vw;
+    border-bottom: 6px solid var(--yellow);
+  }
+
+  .section-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(4rem, 15vw, 12rem);
+    font-weight: 900;
+    color: rgba(245,197,24,0.08);
+    line-height: 1;
+    position: absolute;
+    top: 0; right: 5%;
+  }
+
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(0.65rem, 1.2vw, 0.9rem);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--yellow);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--white);
+    max-width: 70%;
+  }
+
+  /* CONTENT SLIDE */
+  .slide-content {
+    background: var(--black);
+    flex-direction: column;
+    padding: 3vw 6vw;
+  }
+
+  .content-header {
+    margin-bottom: 1.5vw;
+    padding-bottom: 1vw;
+    border-bottom: 2px solid var(--steel);
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .content-header h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(1.4rem, 4vw, 3.2rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .content-header .sub {
+    color: var(--mid);
+    font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .rule-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1vw;
+    flex: 1;
+  }
+
+  .rule-card {
+    background: var(--steel);
+    border-radius: 6px;
+    padding: 1.2vw 1.5vw;
+    display: flex;
+    gap: 1vw;
+    align-items: flex-start;
+  }
+
+  .rule-num {
+    background: var(--yellow);
+    color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(0.9rem, 2.5vw, 1.8rem);
+    min-width: clamp(1.8rem, 4vw, 3rem);
+    height: clamp(1.8rem, 4vw, 3rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .rule-content h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(0.85rem, 2vw, 1.5rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--yellow);
+    line-height: 1.1;
+    margin-bottom: 0.25vw;
+  }
+
+  .rule-content p {
+    font-size: clamp(0.65rem, 1.2vw, 0.9rem);
+    color: #a0adb8;
+    line-height: 1.4;
+  }
+
+  /* PPE SLIDE */
+  .ppe-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1vw;
+    flex: 1;
+    align-items: stretch;
+  }
+
+  .ppe-item {
+    background: var(--steel);
+    border-radius: 8px;
+    padding: 1.5vw 1vw;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5vw;
+    border-top: 3px solid var(--yellow);
+  }
+
+  .ppe-icon {
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
+    line-height: 1;
+  }
+
+  .ppe-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(0.75rem, 1.8vw, 1.3rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .ppe-note {
+    font-size: clamp(0.6rem, 1vw, 0.75rem);
+    color: var(--mid);
+    line-height: 1.3;
+  }
+
+  /* HAZARD SLIDE */
+  .hazard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1vw;
+    flex: 1;
+  }
+
+  .hazard-card {
+    border-radius: 8px;
+    padding: 1.5vw 2vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hazard-card::before {
+    content: attr(data-icon);
+    position: absolute;
+    bottom: -5%; right: 3%;
+    font-size: clamp(3rem, 8vw, 7rem);
+    opacity: 0.12;
+    line-height: 1;
+  }
+
+  .hazard-card.red { background: rgba(220, 38, 38, 0.15); border: 1px solid rgba(220, 38, 38, 0.3); }
+  .hazard-card.orange { background: rgba(232, 93, 4, 0.15); border: 1px solid rgba(232, 93, 4, 0.3); }
+  .hazard-card.yellow { background: rgba(245, 197, 24, 0.1); border: 1px solid rgba(245, 197, 24, 0.25); }
+  .hazard-card.blue { background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.25); }
+
+  .hazard-type {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.4vw;
+    font-weight: 700;
+  }
+
+  .hazard-card.red .hazard-type { color: #ef4444; }
+  .hazard-card.orange .hazard-type { color: var(--orange); }
+  .hazard-card.yellow .hazard-type { color: var(--yellow); }
+  .hazard-card.blue .hazard-type { color: #60a5fa; }
+
+  .hazard-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(1rem, 2.5vw, 2rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.5vw;
+    line-height: 1;
+  }
+
+  .hazard-list {
+    list-style: none;
+    font-size: clamp(0.6rem, 1.1vw, 0.82rem);
+    color: #8a9aaa;
+    line-height: 1.5;
+  }
+
+  .hazard-list li::before {
+    content: '→ ';
+    color: var(--mid);
+  }
+
+  /* EMERGENCY SLIDE */
+  .emergency-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.2vw;
+    flex: 1;
+  }
+
+  .emerg-card {
+    background: var(--steel);
+    border-radius: 8px;
+    padding: 1.5vw;
+    border-top: 4px solid var(--orange);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vw;
+  }
+
+  .emerg-icon {
+    font-size: clamp(1.5rem, 3.5vw, 3rem);
+    line-height: 1;
+  }
+
+  .emerg-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(0.9rem, 2vw, 1.5rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .emerg-steps {
+    list-style: none;
+    font-size: clamp(0.6rem, 1vw, 0.8rem);
+    color: #8a9aaa;
+    line-height: 1.6;
+  }
+
+  .emerg-steps li {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .emerg-steps li .step-n {
+    color: var(--orange);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* CLOSING SLIDE */
+  .slide-closing {
+    background: var(--black);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem;
+  }
+
+  .closing-big {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 7rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.9;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  .closing-big span { color: var(--yellow); }
+
+  .closing-sub {
+    font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+    color: var(--mid);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .checklist-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+  }
+
+  .check-chip {
+    background: var(--steel);
+    border: 1px solid rgba(245,197,24,0.2);
+    border-radius: 4px;
+    padding: 0.4rem 1rem;
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .check-chip .ck { color: var(--yellow); }
+
+  /* THUMB NAV */
+  .thumb-nav {
+    display: flex;
+    gap: 6px;
+    padding: 0.75rem 1.5rem;
+    background: #0a0d13;
+    overflow-x: auto;
+    border-top: 1px solid #1e2a3a;
+    flex-wrap: nowrap;
+  }
+
+  .thumb {
+    width: 80px;
+    height: 45px;
+    background: var(--steel);
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: var(--mid);
+    flex-shrink: 0;
+    border: 2px solid transparent;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+    padding: 2px 4px;
+    transition: border-color 0.15s;
+  }
+
+  .thumb.active {
+    border-color: var(--yellow);
+    color: var(--yellow);
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <div class="nav-title">⚙️ Machine Shop Safety</div>
+  <div class="nav-controls">
+    <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Prev</button>
+    <div class="slide-counter" id="slideCounter">1 / 10</div>
+    <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+  </div>
+</div>
+
+<div class="slides-wrapper">
+
+  <!-- SLIDE 1: Title -->
+  <div class="slide slide-title active" data-label="Title">
+    <div class="title-eyebrow">New Employee Orientation</div>
+    <div class="title-main">Machine<br><span>Shop</span><br>Safety</div>
+    <div class="title-sub">Essential Training · Beginners &amp; New Hires</div>
+    <div class="title-badge">
+      <div class="badge">⏱ 15–18 Min</div>
+      <div class="badge">📋 Text on Screen Format</div>
+      <div class="badge">🎯 Completion Required</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Section — Rules -->
+  <div class="slide slide-section" data-label="Rules Intro">
+    <div class="section-num">01</div>
+    <div class="section-label">Section One</div>
+    <div class="section-title">General<br>Shop Rules</div>
+  </div>
+
+  <!-- SLIDE 3: Rules Grid -->
+  <div class="slide slide-content" data-label="8 Rules">
+    <div class="content-header">
+      <h2>The 8 Non-Negotiables</h2>
+      <div class="sub">Apply to every person, every day</div>
+    </div>
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="rule-num">1</div>
+        <div class="rule-content">
+          <h3>Authorization First</h3>
+          <p>Never operate equipment you haven't been trained and authorized to use.</p>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">2</div>
+        <div class="rule-content">
+          <h3>No Distractions</h3>
+          <p>No phones, headphones, or horseplay when operating equipment.</p>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">3</div>
+        <div class="rule-content">
+          <h3>Dress for It</h3>
+          <p>No loose clothing, dangling jewelry, or open-toed shoes. Tie back long hair.</p>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">4</div>
+        <div class="rule-content">
+          <h3>Stay Alert</h3>
+          <p>Never operate machinery while tired, on drowsy medication, or impaired.</p>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">5</div>
+        <div class="rule-content">
+          <h3>Lock Out / Tag Out</h3>
+          <p>Before maintenance or clearing jams, isolate all energy sources (LOTO).</p>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">6</div>
+        <div class="rule-content">
+          <h3>Keep It Clean</h3>
+          <p>Clean your workstation before and after use. Chips, oil, clutter = hazards.</p>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">7</div>
+        <div class="rule-content">
+          <h3>Report Everything</h3>
+          <p>Near misses, small injuries, equipment issues — report immediately, no exceptions.</p>
+        </div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">8</div>
+        <div class="rule-content">
+          <h3>Know Your Exits</h3>
+          <p>Know emergency exits, fire extinguisher locations, and first aid before you start.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Section — PPE -->
+  <div class="slide slide-section" data-label="PPE Intro">
+    <div class="section-num">02</div>
+    <div class="section-label">Section Two</div>
+    <div class="section-title">Personal<br>Protective<br>Equipment</div>
+  </div>
+
+  <!-- SLIDE 5: PPE Items -->
+  <div class="slide slide-content" data-label="PPE Items">
+    <div class="content-header">
+      <h2>Required PPE</h2>
+      <div class="sub">Inspect before every use · No exceptions</div>
+    </div>
+    <div class="ppe-grid">
+      <div class="ppe-item">
+        <div class="ppe-icon">👓</div>
+        <div class="ppe-name">Safety Glasses</div>
+        <div class="ppe-note">ANSI Z87.1+<br>Required on floor</div>
+      </div>
+      <div class="ppe-item">
+        <div class="ppe-icon">👢</div>
+        <div class="ppe-name">Safety Footwear</div>
+        <div class="ppe-note">Steel-toed<br>Slip-resistant soles</div>
+      </div>
+      <div class="ppe-item">
+        <div class="ppe-icon">🧤</div>
+        <div class="ppe-name">Gloves</div>
+        <div class="ppe-note">For material handling<br>⚠ Remove near rotating parts</div>
+      </div>
+      <div class="ppe-item">
+        <div class="ppe-icon">🎧</div>
+        <div class="ppe-name">Hearing Protection</div>
+        <div class="ppe-note">Zones &gt;85 dB<br>Check posted signs</div>
+      </div>
+      <div class="ppe-item">
+        <div class="ppe-icon">😷</div>
+        <div class="ppe-name">Respiratory</div>
+        <div class="ppe-note">Dust/fume operations<br>Ask supervisor</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Section — Hazards -->
+  <div class="slide slide-section" data-label="Hazards Intro">
+    <div class="section-num">03</div>
+    <div class="section-label">Section Three</div>
+    <div class="section-title">Hazard<br>Awareness</div>
+  </div>
+
+  <!-- SLIDE 7: Hazard Grid -->
+  <div class="slide slide-content" data-label="Hazard Types">
+    <div class="content-header">
+      <h2>4 Hazard Categories</h2>
+      <div class="sub">See it · Name it · Control it</div>
+    </div>
+    <div class="hazard-grid">
+      <div class="hazard-card red" data-icon="⚙">
+        <div class="hazard-type">🔴 Mechanical</div>
+        <div class="hazard-title">Moving Parts &amp; Edges</div>
+        <ul class="hazard-list">
+          <li>Rotating spindles, chucks, shafts</li>
+          <li>Sharp cutting tools &amp; edges</li>
+          <li>Hot metal chips (&gt;500°C)</li>
+          <li>Flying grinding debris</li>
+        </ul>
+      </div>
+      <div class="hazard-card orange" data-icon="🔥">
+        <div class="hazard-type">🟠 Chemical / Fire</div>
+        <div class="hazard-title">Fluids &amp; Combustion</div>
+        <ul class="hazard-list">
+          <li>Cutting fluids — skin &amp; slip hazard</li>
+          <li>Metal dust — fire/explosion risk</li>
+          <li>Solvents and cleaning agents</li>
+          <li>SDS sheets must be accessible</li>
+        </ul>
+      </div>
+      <div class="hazard-card yellow" data-icon="⚡">
+        <div class="hazard-type">🟡 Electrical</div>
+        <div class="hazard-title">Power &amp; Panels</div>
+        <ul class="hazard-list">
+          <li>Damaged cords or plugs</li>
+          <li>Coolant near electrical panels</li>
+          <li>Unauthorized electrical work</li>
+          <li>Always use LOTO procedures</li>
+        </ul>
+      </div>
+      <div class="hazard-card blue" data-icon="🧍">
+        <div class="hazard-type">🔵 Ergonomic</div>
+        <div class="hazard-title">Body &amp; Fatigue</div>
+        <ul class="hazard-list">
+          <li>Repetitive gripping &amp; twisting</li>
+          <li>Awkward postures during setup</li>
+          <li>Heavy lifting — get help &gt;50 lbs</li>
+          <li>Long standing — use anti-fatigue mats</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Section — Emergency -->
+  <div class="slide slide-section" data-label="Emergency Intro">
+    <div class="section-num">04</div>
+    <div class="section-label">Section Four</div>
+    <div class="section-title">Emergency<br>Procedures</div>
+  </div>
+
+  <!-- SLIDE 9: Emergency Cards -->
+  <div class="slide slide-content" data-label="Emergency Steps">
+    <div class="content-header">
+      <h2>Emergency Response</h2>
+      <div class="sub">Know these before day one</div>
+    </div>
+    <div class="emergency-grid">
+      <div class="emerg-card">
+        <div class="emerg-icon">🔴</div>
+        <div class="emerg-title">Machine Hazard</div>
+        <ul class="emerg-steps">
+          <li><span class="step-n">1.</span> Hit E-stop immediately</li>
+          <li><span class="step-n">2.</span> Clear the area</li>
+          <li><span class="step-n">3.</span> Notify supervisor</li>
+          <li><span class="step-n">4.</span> Do not restart machine</li>
+        </ul>
+      </div>
+      <div class="emerg-card">
+        <div class="emerg-icon">🚨</div>
+        <div class="emerg-title">Injury / Medical</div>
+        <ul class="emerg-steps">
+          <li><span class="step-n">1.</span> Stop machine, call for help</li>
+          <li><span class="step-n">2.</span> Do not move injured person</li>
+          <li><span class="step-n">3.</span> Send someone to meet EMS</li>
+          <li><span class="step-n">4.</span> Preserve the scene</li>
+        </ul>
+      </div>
+      <div class="emerg-card">
+        <div class="emerg-icon">🔥</div>
+        <div class="emerg-title">Fire</div>
+        <ul class="emerg-steps">
+          <li><span class="step-n">1.</span> Sound the fire alarm</li>
+          <li><span class="step-n">2.</span> Evacuate via nearest exit</li>
+          <li><span class="step-n">3.</span> PASS: Pull·Aim·Squeeze·Sweep</li>
+          <li><span class="step-n">4.</span> Muster at designated point</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Closing -->
+  <div class="slide slide-closing" data-label="Closing">
+    <div class="closing-big">Safety is<br><span>Everyone's</span><br>Job.</div>
+    <div class="closing-sub">Complete the post-training quiz to receive your certification. Questions? Ask your supervisor before you start work.</div>
+    <div class="checklist-row">
+      <div class="check-chip"><span class="ck">✓</span> 8 Shop Rules</div>
+      <div class="check-chip"><span class="ck">✓</span> PPE Compliance</div>
+      <div class="check-chip"><span class="ck">✓</span> 4 Hazard Types</div>
+      <div class="check-chip"><span class="ck">✓</span> Emergency Response</div>
+    </div>
+  </div>
+
+</div><!-- slides-wrapper -->
+
+<div class="thumb-nav" id="thumbNav"></div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+
+  function buildThumbs() {
+    const nav = document.getElementById('thumbNav');
+    slides.forEach((s, i) => {
+      const t = document.createElement('div');
+      t.className = 'thumb' + (i === 0 ? ' active' : '');
+      t.textContent = (i + 1) + '. ' + (s.dataset.label || '');
+      t.onclick = () => goTo(i);
+      nav.appendChild(t);
+    });
+  }
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.thumb')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.thumb')[current].classList.add('active');
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + total;
+    document.querySelectorAll('.thumb')[current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
+  function changeSlide(dir) { goTo(current + dir); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  });
+
+  buildThumbs();
+</script>
+</body>
+</html>
